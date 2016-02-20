@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Match(models.Model):
     match_id = models.IntegerField(primary_key=True,unique=True)
