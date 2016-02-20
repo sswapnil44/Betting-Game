@@ -3,8 +3,6 @@ from football.forms import UserForm
 
 # Create your views here.
 
-def home(request):
-    render(request, home.html)
 
 def register(request):
     registered = False
