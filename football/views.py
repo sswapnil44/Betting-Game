@@ -3,9 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from football.forms import UserForm
-
-# Create your views here.
-
+from football.football_data import matchSelection
 
 def register(request):
     registered = False
@@ -51,3 +49,12 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+def league(request, league_name):
+    league_name = league_name.replace("-"," ").title()
+    league_dict = {'La Liga': 64,'Ligue 1': 74, 'Serei A': 101, 'Champions League': 21, 'Bundesliga': 15, }
+    if league_name in league_dict:
+        context = { "league_name": league_name, }
+        return render(request, 'league.html', context)
+    else:
+        return HttpResponseRedirect('/')

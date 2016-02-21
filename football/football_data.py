@@ -3,6 +3,7 @@ __author__ = 'Swapnil'
 import requests
 import json
 import datetime
+import pickle
 
 def leagueSelection():
     # Getting matches info:- All recent and upcoming matches details
@@ -88,29 +89,29 @@ def matchSelection():
         print("* Match Score:", chosen_match['homeGoals'], "-", chosen_match['awayGoals'])
 
 
-# Reading api_key
-apiKey = open('api_key', 'r').read()
+if __name__ == "__main__":
+    # Reading api_key
+    apiKey = open('api_key2', 'r').read()
 
-# Getting leagues info:- All leagues and competitions detail
-all_leagues = requests.get("https://api.crowdscores.com/api/v1/competitions", headers={"x-crowdscores-api-key":apiKey}).json()
+    # Getting leagues info:- All leagues and competitions detail
+    league_file = open('all_leagues', 'rb')
+    all_leagues = pickle.load(league_file)
 
+    # Assigning id to every league
+    league_id = {}
+    for league in all_leagues:
+        league_id[league['name']] = league['dbid']
 
-# Assigning id to every league
-league_id = {}
-for league in all_leagues:
-    league_id[league['name']] = league['dbid']
+    # Displaying leagues for choices
+    s_no = 1
+    for league in sorted(league_id.keys()):
+        print(s_no, league, league_id[league])
+        s_no += 1
 
-# Displaying leagues for choices
-s_no = 1
-for league in sorted(league_id.keys()):
-    print(s_no, league)
-    s_no += 1
+    # Taking league input from user
+    input_league = int(input())
+    match_id, s_no = leagueSelection()
 
-
-# Taking league input from user
-input_league = int(input())
-match_id, s_no = leagueSelection()
-
-# Taking match input from user
-input_match = int(input())
-matchSelection(match_id)
+    # Taking match input from user
+    input_match = int(input())
+    matchSelection()

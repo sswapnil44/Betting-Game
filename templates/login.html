@@ -4,14 +4,19 @@
         <title>Login</title>
     </head>
     <body>
-        <h1>Login</h1>
-        <form id="login_form" method="post">
-        {% csrf_token %}
-        Username: <input type="text" name="username" value="" size="50" />
-        <br />
-        Password: <input type="password" name="password" value="" size="50" />
-        <br />
-        <input type="submit" value="submit" />
-        </form>
+        {% if not user.is_authenticated %}
+            <h1>Login</h1>
+            <form id="login_form" method="post">
+            {% csrf_token %}
+            Username: <input type="text" name="username" value="" size="50" />
+            <br />
+            Password: <input type="password" name="password" value="" size="50" />
+            <br />
+            <input type="submit" value="submit" />
+            </form>
+        {% else %}
+            <p>You are already registered.</p>
+            <!--<a href="/">Back to homepage</a>-->
+        {% endif %}
     </body>
 </html>

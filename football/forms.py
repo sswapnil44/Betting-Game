@@ -12,4 +12,4 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'password', 'first_name', 'last_name', 'email', )
 
-#class LoginForm(forms.ModelForm):
+

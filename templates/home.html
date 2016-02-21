@@ -11,11 +11,11 @@
         {% else %}
             <p>Welcome {{ user.first_name }}</p><br>
             <p>Select a league to bet</p>
-            <a href="">La Liga</a><br>
-            <a href="">EPL</a><br>
-            <a href="">Champions League</a><br>
-            <a href="">Bundesliga</a><br>
-            <a href="">Ligue 1</a><br>
+            <a href="{% url 'league' 'la-liga' %}">La Liga</a><br>
+            <a href="{% url 'league' 'serie-a' %}">Serie A</a><br>
+            <a href="{% url 'league' 'champions-league' %}">Champions League</a><br>
+            <a href="{% url 'league' 'bundesliga' %}">Bundesliga</a><br>
+            <a href="{% url 'league' 'ligue-1' %}">Ligue 1</a><br>
             <br><br><br><a href="/logout/">Logout</a>
         {% endif %}
     </body>
