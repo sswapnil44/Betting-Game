@@ -18,6 +18,7 @@ from django.contrib import admin
 from . import views
 from football.views import *
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home, name='home'),

@@ -50,6 +50,7 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+
 def league(request, league_name):
     league_name = league_name.replace("-"," ").title()
     league_dict = {'La Liga': 64,'Ligue 1': 74, 'Serei A': 101, 'Champions League': 21, 'Bundesliga': 15, }
@@ -58,3 +59,4 @@ def league(request, league_name):
         return render(request, 'league.html', context)
     else:
         return HttpResponseRedirect('/')
+
