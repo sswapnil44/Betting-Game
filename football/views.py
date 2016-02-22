@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
-from football.forms import UserForm
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from football.forms import UserForm, BettingForm
 from BetScore.models import Users
+from football.models import UserProfile, Match
 from django.contrib.auth import hashers
 import time
 from football.football_data import matchSelection, league_matches_list, all_match_updates
@@ -16,6 +17,10 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+            profile = UserProfile()
+            profile.user = user
+            profile.points = 0
+            profile.save()
             registered = True
         else:
             print(user_form.errors)
@@ -64,10 +69,9 @@ def register_api(request):
     except:
         return HttpResponse("Already registered")
 
-#apiKey = open('api_key', 'r').read()
 def league(request, league_name):
     league_name = league_name.replace("-"," ").title()
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serei A': 160, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
     if league_name in league_dict:
         league_url = "-".join(league_name.lower().split())
         league_wise_match = all_match_updates()
@@ -79,12 +83,32 @@ def league(request, league_name):
     else:
         return HttpResponseRedirect('/')
 
+@login_required()
 def match(request, league_name, match_id):
-    print(match_id)
-    print(league_name)
-    print("gfhf")
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serei A': 160, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
     league_name = league_name.replace("-"," ").title()
     match_data = matchSelection(match_id)
-    context = {'match_data': match_data, }
+
+    if request.method == 'POST':
+        betting_form = BettingForm(data=request.POST)
+        if betting_form.is_valid():
+            bet = betting_form.save(commit=False)
+            bet.username = request.user
+            try:
+                bet.match_id = Match.objects.get(match_id=match_id)
+            except:
+                return HttpResponse('MatchID not found')
+            try:
+                bet.save()
+            except:
+                return HttpResponse("Bet already accepted for this match")
+            return HttpResponse('Bet accepted')
+        else:
+            print(betting_form.errors)
+    else:
+        betting_form = BettingForm()
+
+
+    context = {'match_data': match_data, 'betting_form': betting_form }
+
     return render(request, 'bet_page.html', context)
