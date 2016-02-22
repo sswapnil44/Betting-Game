@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from . import views
 from football.views import *
+from MakeABet.views import *
 
 
 urlpatterns = [
@@ -26,5 +27,6 @@ urlpatterns = [
     url(r'^login/$', user_login, name='user_login'),
     url(r'^logout/$', user_logout, name='user_logout'),
     url(r'^(?P<league_name>[\w\-]+)$', league, name='league'),
-    url(r'^(?P<league_name>[\w\-]+)/(?P<match_id>[\d]+)$', match, name='match')
+    url(r'^(?P<league_name>[\w\-]+)/(?P<match_id>[\d]+)$', match, name='match'),
+    url(r'/register/api', register_api, name='apireg'),
 ]
