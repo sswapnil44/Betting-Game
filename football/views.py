@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from football.forms import UserForm
-from football.football_data import matchSelection
+from football.football_data import matchSelection, league_matches_list, all_match_updates
 
 def register(request):
     registered = False
@@ -50,13 +50,27 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-
+#apiKey = open('api_key', 'r').read()
 def league(request, league_name):
     league_name = league_name.replace("-"," ").title()
-    league_dict = {'La Liga': 64,'Ligue 1': 74, 'Serei A': 101, 'Champions League': 21, 'Bundesliga': 15, }
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serei A': 160, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
     if league_name in league_dict:
-        context = { "league_name": league_name, }
+        league_url = "-".join(league_name.lower().split())
+        league_wise_match = all_match_updates()
+        league_matches = league_matches_list(league_wise_match,league_dict[league_name])
+        upcoming_matches = league_matches['upcomingMatches']
+        print(league_matches)
+        context = { 'league_name': league_name, 'upcoming_matches': upcoming_matches, 'league_url': league_url, }
         return render(request, 'league.html', context)
     else:
         return HttpResponseRedirect('/')
 
+def match(request, league_name, match_id):
+    print(match_id)
+    print(league_name)
+    print("gfhf")
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serei A': 160, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
+    league_name = league_name.replace("-"," ").title()
+    match_data = matchSelection(match_id)
+    context = {'match_data': match_data, }
+    return render(request, 'bet_page.html', context)
