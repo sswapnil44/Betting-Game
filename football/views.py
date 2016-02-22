@@ -60,7 +60,7 @@ def register_api(request):
     user.auth_key = hashers.mask_hash(request.user.email + str(time.time()))
     try:
         user.save()
-        return HttpResponse(user.auth_key)
+        return HttpResponse("test" + user.auth_key)
     except:
         return HttpResponse("Already registered")
 
