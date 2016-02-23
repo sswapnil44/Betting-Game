@@ -6,23 +6,26 @@ import pickle
 import json
 import os
 from MakeABet.settings import BASE_DIR
-api_key = open(os.path.join(BASE_DIR, 'football', 'api_key'), 'r').read()
 
+api_key = open(os.path.join(BASE_DIR, 'football', 'api_key'), 'r').read()
+print(api_key)
 def all_match_updates():
     # Getting matches info:- All recent and upcoming matches details
     # Getting leagues info:- All leagues and competitions detail
-    #league_file = open('all_leagues', 'rb')
+
     league_file = open(os.path.join(BASE_DIR, 'football', 'all_leagues'), 'rb')
     all_leagues = pickle.load(league_file)
 
-    all_matches = requests.get("https://api.crowdscores.com/api/v1/matches", headers={"x-crowdscores-api-key":api_key}).json()
-
+    all_matches = requests.get("https://api.crowdscores.com/api/v1/matches?api_key="+api_key).json()
     leag_wise_match = {}
     for league in all_leagues:
         leag_wise_match[league['dbid']] = []
 
     for match in all_matches:
-        leag_wise_match[match['competition']['dbid']].append({'dbid':match['dbid'], 'homeTeam':match['homeTeam']['name'], 'awayTeam':match['awayTeam']['name'], 'matchTime':match['start']})
+        try:
+            leag_wise_match[match['competition']['dbid']].append({'dbid':match['dbid'], 'homeTeam':match['homeTeam']['name'], 'awayTeam':match['awayTeam']['name'], 'matchTime':match['start'], 'outcome':match['outcome'], 'homeGoals':match['homeGoals'], 'awayGoals':match['awayGoals'], 'league': match['competition']['name'] })
+        except:
+            pass
 
     return leag_wise_match
 
@@ -64,7 +67,7 @@ def league_matches_list(leag_wise_match, input_league_id):
 
 
 def matchSelection(match_id):
-    chosen_match = requests.get("https://api.crowdscores.com/api/v1/matches/"+str(match_id), headers={"x-crowdscores-api-key":api_key}).json()
+    chosen_match = requests.get("https://api.crowdscores.com/api/v1/matches/"+str(match_id)+"?api_key="+api_key).json()
     print(len(chosen_match))
     print(match_id)
     print(json.dumps(chosen_match))
