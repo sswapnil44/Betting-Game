@@ -3,10 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from football.forms import UserForm, BettingForm
-from BetScore.models import Users
 from football.models import UserProfile, Match
-from django.contrib.auth import hashers
-import time
+from rest_framework.authtoken.models import Token
 from football.football_data import matchSelection, league_matches_list, all_match_updates
 
 def register(request):
@@ -59,15 +57,12 @@ def user_logout(request):
     return HttpResponseRedirect('/')
 
 @login_required()
-def register_api(request):
-    user = Users()
-    user.email = request.user.email
-    user.auth_key = hashers.mask_hash(request.user.email + str(time.time()))
+def api_registration(request):
     try:
-        user.save()
-        return HttpResponse("test" + user.auth_key)
+        token = Token.objects.create(user=request.user)
+        return HttpResponse(token.key)
     except:
-        return HttpResponse("Already registered")
+        return HttpResponse(Token.objects.get(user=request.user))
 
 def league(request, league_name):
     league_name = league_name.replace("-"," ").title()
