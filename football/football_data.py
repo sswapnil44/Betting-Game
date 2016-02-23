@@ -93,3 +93,6 @@ if __name__ == "__main__":
     league_matches = league_matches_list(leag_wise_match,145)
     print(league_matches)
     print(matchSelection(47579))
+# Taking match input from user
+input_match = int(input())
+matchSelection()
