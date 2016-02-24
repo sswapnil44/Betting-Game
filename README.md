@@ -1,0 +1,68 @@
+# MakeABet
+
+To use MakeABet api: First register on /register
+Then login and go to /auth_key to get your auth_key.
+
+
+The API lives under the url /api
+
+API authentication:
+        To gain access to the api an auth_key is required. This key has to be sent with every request.
+        The possible ways of sending the api key:
+
+            GET/endpoint{?api_key}
+
+            api_key=string(required)
+            Example:  api_key=0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a
+
+BETS:
+        Get information about bets.
+
+            GET/endpoint{?username, match_id, league_id}
+
+            Example url: /bets?username=xyz&match_id=123&league_id=1
+
+        Parameters:
+            username=string(optional)
+            Example: username=xyz
+            Search for bets by username
+
+            match_id=string(optional)
+            Example: match_id=123
+            Search for bets by match_id
+
+            league_id=string(optional)
+            Example: league_id=1
+            Search for bets by league_id
+
+                Valid league_ids are
+                    1 for English Premier League
+                    2 for La Liga
+                    3 for Serie A
+                    4 for Champions League
+                    5 for Bundesliga
+                    6 for Ligue 1
+
+MATCHES:
+        Get information about matches.
+
+            GET/endpoint{?match_id, league_id}
+
+            Example url: /matches?match_id=123&league_id=1
+
+        Parameters:
+            match_id=string(optional)
+            Example: match_id=123
+            Search for bets by match_id
+
+            league_id=string(optional)
+            Example: league_id=1
+            Search for bets by league_id
+
+                Valid league_ids are
+                    1 for English Premier League
+                    2 for La Liga
+                    3 for Serie A
+                    4 for Champions League
+                    5 for Bundesliga
+                    6 for Ligue 1
