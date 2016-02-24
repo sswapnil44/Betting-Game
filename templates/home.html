@@ -6,10 +6,11 @@
     </head>
     <body>
         {% if not user.is_authenticated %}
-            <a href="/login/">Login</a><br>
-            <a href="/register/">Register Here </a>
+            <a href="/login">Login</a><br>
+            <a href="/register">Register Here </a>
         {% else %}
             <p>Welcome {{ user.first_name }}</p><br>
+            <p>Your points = {{ points }}</p>
             <p>Select a league to bet</p>
             <a href="{% url 'league' 'english-premier-league' %}">English Premier League</a><br>
             <a href="{% url 'league' 'la-liga' %}">La Liga</a><br>

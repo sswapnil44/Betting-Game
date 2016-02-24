@@ -13,6 +13,13 @@ from rest_framework.authtoken.models import Token
 from football.football_data import matchSelection, league_matches_list, all_match_updates
 import simplejson
 
+def home(request):
+    context_dict = dict()
+    if not str(request.user) == "AnonymousUser":
+        user_profile = UserProfile.objects.get(user=request.user)
+        context_dict = {'points': user_profile.points}
+    return render(request, 'home.html', context_dict)
+
 def register(request):
     registered = False
     if request.method == 'POST':
@@ -89,7 +96,7 @@ def league(request, league_name):
 
 @login_required()
 def match(request, league_name, match_id):
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2, }
     league_name = league_name.replace("-"," ").title()
     match_data = matchSelection(match_id)
 
@@ -118,11 +125,8 @@ def match(request, league_name, match_id):
 
     return render(request, 'bet_page.html', context)
 
-
-
 def allBets(request):
     api_key = request.GET.get('api_key', None)
-
     if api_key == str(Token.objects.get(key=api_key)):
         username = request.GET.get('username',None)
         match_id = request.GET.get('match_id',None)
@@ -188,3 +192,12 @@ def allMatches(request):
         return HttpResponse(simplejson.dumps(betDetails))
     else:
         return HttpResponse('Invalid auth_key, Register to get auth_key')
+
+def leaderboard(request):
+    user_profiles = UserProfile.objects.filter()
+    points = {}
+
+    for user_profile in user_profiles:
+        points[user_profile.user.username] = user_profile.points
+    context_dict = {'points': points, }
+    return render(request, 'leaderboard.html', context_dict)

@@ -5,7 +5,8 @@ django.setup()
 
 
 from football.football_data import all_match_updates
-from football.models import Bets, Match, UserProfile
+from football.models import Bets, Match
+import time
 
 def update_match():
     all_matches = all_match_updates()
@@ -21,8 +22,8 @@ def update_match():
                 match_instance = Match.objects.get(match_id=match['dbid'])
 
                 # if match result is not in db but is updated in api call then update it in database
-                if match_instance.outcome is None:
-                    if match['outcome'] is not None:
+                if match_instance.outcome is None :
+                    if match['outcome'] is not None :
                         match_instance.outcome = match['outcome']['winner']
                         match_instance.home_team_goals = match['homeGoals']
                         match_instance.away_team_goals = match['awayGoals']
@@ -64,6 +65,7 @@ def update_match():
                                 points_earned -= 5
 
                             bet.username.points += points_earned
+                            bet.username.save()
             except:
                 if match['outcome'] is not None:
                     winner = match['outcome']['winner']
@@ -81,6 +83,16 @@ def update_match():
                     outcome = winner,
                 )
                 new_match.save()
+
+def start_up():
+    while(True):
+        try:
+            update_match()
+            print("Matches updated")
+        except:
+            continue
+
+        time.sleep(299)
 
 if __name__ == "__main__":
     update_match()
