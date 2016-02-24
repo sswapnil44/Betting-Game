@@ -162,15 +162,11 @@ def allBets(request, type, auth_key):
 
             return HttpResponse(simplejson.dumps(betDetails))
         except:
-            return HttpResponse('invalid url')
+            return HttpResponse('invalid url', status=404)
     else:
-        return HttpResponse('Invalid auth_key, Register to get auth_key')
+        return HttpResponse('Invalid auth_key, Register to get auth_key', status=403)
 
 def leaderboard(request):
-    user_profiles = UserProfile.objects.filter()
-    points = {}
-
-    for user_profile in user_profiles:
-        points[user_profile.user.username] = user_profile.points
-    context_dict = {'points': points, }
+    user_profiles = UserProfile.objects.all().order_by('points').reverse()
+    context_dict = {'user_profiles': user_profiles, }
     return render(request, 'leaderboard.html', context_dict)

@@ -7,8 +7,8 @@
 <body>
     <h1>Leaderboard</h1>
     <ol>
-        {% for p in points %}
-        <li>{{ p }}<br></li>
+        {% for user_profile in user_profiles %}
+        <li>{{ user_profile.user.username }} : {{ user_profile.points }}</li>
         {% endfor %}
     </ol>
 </body>
