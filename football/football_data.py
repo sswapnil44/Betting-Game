@@ -86,4 +86,3 @@ def matchSelection(match_id):
 if __name__ == "__main__":
     # Getting leagues info:- All leagues and competitions detail
     league_file = open('all_leagues', 'rb')
-    #all_leagues = pickle.load(league_file)

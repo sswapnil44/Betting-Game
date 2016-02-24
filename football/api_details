@@ -1,0 +1,11 @@
+To use MakeABet api:  Go to http://127.0.0.1:8000/api/bets/all/api_key=auth_key
+
+You can also filter bets by using username, match_id, league_id instead of all but one at time.
+e.g username=dummy or match_id=47579 or league_id=2
+
+1 for English Premier League
+2 for La Liga
+3 for Serie A
+4 for Champions League
+5 for Bundesliga
+6 for Ligue 1
