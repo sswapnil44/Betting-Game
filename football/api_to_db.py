@@ -93,3 +93,6 @@ def start_up():
             continue
 
         time.sleep(299)
+
+if __name__ == "__main__":
+    update_match()

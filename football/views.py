@@ -14,8 +14,10 @@ from football.football_data import matchSelection, league_matches_list, all_matc
 import simplejson
 
 def home(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    context_dict = {'points': user_profile.points}
+    context_dict = dict()
+    if not str(request.user) == "AnonymousUser":
+        user_profile = UserProfile.objects.get(user=request.user)
+        context_dict = {'points': user_profile.points}
     return render(request, 'home.html', context_dict)
 
 def register(request):

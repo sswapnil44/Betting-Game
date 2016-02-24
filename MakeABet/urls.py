@@ -20,8 +20,8 @@ from MakeABet.views import *
 from football.api_to_db import start_up
 import multiprocessing
 
-process = multiprocessing.Process(target=start_up)
-process.start()
+#process = multiprocessing.Process(target=start_up)
+#process.start()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
