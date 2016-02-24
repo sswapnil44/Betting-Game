@@ -98,7 +98,7 @@ def match(request, league_name, match_id):
         betting_form = BettingForm(data=request.POST)
         if betting_form.is_valid():
             bet = betting_form.save(commit=False)
-            bet.username = request.user
+            bet.username = UserProfile.objects.get(user=request.user)
             try:
                 bet.match_id = Match.objects.get(match_id=match_id)
             except:
@@ -121,41 +121,44 @@ def match(request, league_name, match_id):
 
 
 def allBets(request, type, auth_key):
-    if auth_key == str(Token.objects.get(user=request.user)):
-        try:
-            betDetails = []
-            bets = []
+    for key in Token.objects.filter():
+        if str(key)==auth_key:
+            try:
+                betDetails = []
+                bets = []
 
-            type = type.split("=")
+                type = type.split("=")
 
-            if type[0]=='all':
-                bets = Bets.objects.filter()
+                if type[0]=='all':
+                    bets = Bets.objects.filter()
 
-            elif type[0]=='username':
-                bets = Bets.objects.filter(username__user__username=type[1])
+                elif type[0]=='username':
+                    bets = Bets.objects.filter(username__user__username=type[1])
 
-            elif type[0]=='match_id':
-                bets = Bets.objects.filter(match_id__match_id=int(type[1]))
+                elif type[0]=='match_id':
+                    bets = Bets.objects.filter(match_id__match_id=int(type[1]))
 
-            elif type[0]=='league_id':
-                value = {1:'Premier League', 2:'La Liga', 3:'Serie A', 4:'Champions League', 5:'Bundesliga', 6:'Ligue 1'}
-                bets = Bets.objects.filter(match_id__league=value[int(type[1])])
+                elif type[0]=='league_id':
+                    value = {1:'Premier League', 2:'La Liga', 3:'Serie A', 4:'Champions League', 5:'Bundesliga', 6:'Ligue 1'}
+                    bets = Bets.objects.filter(match_id__league=value[int(type[1])])
 
-            res = {0:'homeTeam', 1:'awayTeam', 2:'draw'}
-            for bet in bets:
-                betDetails.append({'userDetails':{'username':bet.username.user.username,
-                            'name':bet.username.user.first_name+" "+bet.username.user.last_name,
-                            'email':bet.username.user.email, 'points':bet.username.points},
-                                    'matchDetails':{'matchID':bet.match_id.match_id,
-                            'startTime':bet.match_id.time, 'league':bet.match_id.league,
-                            'homeTeam':bet.match_id.home_team, 'awayTeam':bet.match_id.away_team,
-                            'homeTeamGoals':bet.match_id.home_team_goals, 'awayTeamGoals':bet.match_id.away_team_goals,
-                            'outcome':bet.match_id.outcome},
-                                     'predictions':{'winner': res[bet.winner_prediction], 'goalDifference':bet.goal_difference,
-                            'homeTeamGoals':bet.home_goals_prediction, 'awayTeamGoals':bet.away_goals_prediction}})
+                res = {0:'homeTeam', 1:'awayTeam', 2:'draw'}
+                for bet in bets:
+                    betDetails.append({'userDetails':{'username':bet.username.user.username,
+                                'name':bet.username.user.first_name+" "+bet.username.user.last_name,
+                                'email':bet.username.user.email, 'points':bet.username.points},
+                                        'matchDetails':{'matchID':bet.match_id.match_id,
+                                'startTime':bet.match_id.time, 'league':bet.match_id.league,
+                                'homeTeam':bet.match_id.home_team, 'awayTeam':bet.match_id.away_team,
+                                'homeTeamGoals':bet.match_id.home_team_goals, 'awayTeamGoals':bet.match_id.away_team_goals,
+                                'outcome':bet.match_id.outcome},
+                                         'predictions':{'winner': res[bet.winner_prediction], 'goalDifference':bet.goal_difference,
+                                'homeTeamGoals':bet.home_goals_prediction, 'awayTeamGoals':bet.away_goals_prediction}})
 
-            return HttpResponse(simplejson.dumps(betDetails))
-        except:
-            return HttpResponse('invalid url')
+
+                return HttpResponse(simplejson.dumps(betDetails))
+            except:
+                return HttpResponse('invalid url')
+            break
     else:
         return HttpResponse('Invalid auth_key, Register to get auth_key')
