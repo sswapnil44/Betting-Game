@@ -8,7 +8,7 @@ import os
 from MakeABet.settings import BASE_DIR
 
 api_key = open(os.path.join(BASE_DIR, 'football', 'api_key'), 'r').read()
-print(api_key)
+
 def all_match_updates():
     # Getting matches info:- All recent and upcoming matches details
     # Getting leagues info:- All leagues and competitions detail
@@ -68,9 +68,6 @@ def league_matches_list(leag_wise_match, input_league_id):
 
 def matchSelection(match_id):
     chosen_match = requests.get("https://api.crowdscores.com/api/v1/matches/"+str(match_id)+"?api_key="+api_key).json()
-    print(len(chosen_match))
-    print(match_id)
-    print(json.dumps(chosen_match))
     match_dict = {}
     match_dict['matchTime'] = datetime.datetime.fromtimestamp(int(chosen_match['start'])/1000)
     match_dict['homeTeam'] = chosen_match['homeTeam']['name']
@@ -89,13 +86,4 @@ def matchSelection(match_id):
 if __name__ == "__main__":
     # Getting leagues info:- All leagues and competitions detail
     league_file = open('all_leagues', 'rb')
-    all_leagues = pickle.load(league_file)
-
-    leag_wise_match = all_match_updates()
-    print(leag_wise_match)
-    league_matches = league_matches_list(leag_wise_match,145)
-    print(league_matches)
-    print(matchSelection(47579))
-# Taking match input from user
-input_match = int(input())
-matchSelection()
+    #all_leagues = pickle.load(league_file)

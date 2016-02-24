@@ -85,6 +85,7 @@ def match(request, league_name, match_id):
     match_data = matchSelection(match_id)
 
     if request.method == 'POST':
+        print("post request received")
         betting_form = BettingForm(data=request.POST)
         if betting_form.is_valid():
             bet = betting_form.save(commit=False)

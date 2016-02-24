@@ -8,7 +8,7 @@ class UserProfile(models.Model):
 
     points = models.IntegerField(default=0)
 
-    def __unicode__(self):
+    def __str__(self):
         return smart_text(self.user.username)
 
 class Match(models.Model):
@@ -21,19 +21,21 @@ class Match(models.Model):
     away_team_goals = models.IntegerField(blank=True, null=True)
     outcome = models.TextField(null=True)
 
-    def __unicode__(self):
-        return self.home_team + "    " + self.home_team_goals + "  Vs   " + self.away_team_goals + "     " + self.away_team
+    def __str__(self):
+        a = str(self.match_id)+ " - " + self.home_team + " Vs " + self.away_team
+        return a
 
 class Bets(models.Model):
     match_id = models.ForeignKey(Match)
-    username = models.ForeignKey(User)
+    username = models.ForeignKey(UserProfile)
     winner_prediction = models.SmallIntegerField(blank=True, null=True)
     goal_difference = models.SmallIntegerField(blank=True, null=True)
     home_goals_prediction = models.SmallIntegerField(blank=True, null=True)
     away_goals_prediction = models.SmallIntegerField(blank=True, null=True)
 
-    def __unicode__(self):
-        return "Prediction for match no." + str(self.match_id)+" by" + self.username
-
     class Meta:
         unique_together = ('match_id', 'username')
+
+    def __str__(self):
+        a = "For match " + str(self.match_id.match_id) + " by " + str(self.username.user.username)
+        return a
