@@ -13,6 +13,11 @@ from rest_framework.authtoken.models import Token
 from football.football_data import matchSelection, league_matches_list, all_match_updates
 import simplejson
 
+def home(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    context_dict = {'points': user_profile.points}
+    return render(request, 'home.html', context_dict)
+
 def register(request):
     registered = False
     if request.method == 'POST':
@@ -89,7 +94,7 @@ def league(request, league_name):
 
 @login_required()
 def match(request, league_name, match_id):
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2, }
     league_name = league_name.replace("-"," ").title()
     match_data = matchSelection(match_id)
 
@@ -98,7 +103,7 @@ def match(request, league_name, match_id):
         betting_form = BettingForm(data=request.POST)
         if betting_form.is_valid():
             bet = betting_form.save(commit=False)
-            bet.username = request.user
+            bet.username = UserProfile.objects.get(user=request.user)
             try:
                 bet.match_id = Match.objects.get(match_id=match_id)
             except:
@@ -117,7 +122,6 @@ def match(request, league_name, match_id):
     context = {'match_data': match_data, 'betting_form': betting_form }
 
     return render(request, 'bet_page.html', context)
-
 
 
 def allBets(request, type, auth_key):
@@ -159,3 +163,12 @@ def allBets(request, type, auth_key):
             return HttpResponse('invalid url')
     else:
         return HttpResponse('Invalid auth_key, Register to get auth_key')
+
+def leaderboard(request):
+    user_profiles = UserProfile.objects.filter()
+    points = {}
+
+    for user_profile in user_profiles:
+        points[user_profile.user.username] = user_profile.points
+    context_dict = {'points': points, }
+    return render(request, 'leaderboard.html', context_dict)

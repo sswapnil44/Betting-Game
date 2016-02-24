@@ -19,7 +19,7 @@ class Match(models.Model):
     away_team = models.TextField(max_length=100)
     home_team_goals = models.IntegerField(blank=True, null=True)
     away_team_goals = models.IntegerField(blank=True, null=True)
-    outcome = models.TextField(null=True)
+    outcome = models.TextField(null=True, default=None)
 
     def __str__(self):
         a = str(self.match_id)+ " - " + self.home_team + " Vs " + self.away_team
