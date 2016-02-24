@@ -1,10 +1,10 @@
 # MakeABet
 
-To use MakeABet api: First register on localhost
-Then login and go to localhost/auth_key to get your auth_key.
+To use MakeABet api: First register on /register
+Then login and go to /auth_key to get your auth_key.
 
 
-The API lives under the url localhost/api
+The API lives under the url /api
 
 API authentication:
         To gain access to the api an auth_key is required. This key has to be sent with every request.
