@@ -20,14 +20,14 @@ from MakeABet.views import *
 from football.api_to_db import start_up
 import multiprocessing
 
-#process = multiprocessing.Process(target=start_up)
-#process.start()
+process = multiprocessing.Process(target=start_up)
+process.start()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^auth_key$', api_registration, name='registerapi'),
     url(r'^api/bets$', allBets, name='bets_info'),
-    url(r'^api/matches$', allMatches, name='bets_info'),
+    url(r'^api/matches$', allMatches, name='matches_info'),
     url(r'^$', home, name='home'),
     url(r'^register$', register, name='register'),
     url(r'^login$', user_login, name='user_login'),

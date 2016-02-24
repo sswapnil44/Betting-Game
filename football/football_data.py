@@ -7,7 +7,8 @@ import json
 import os
 from MakeABet.settings import BASE_DIR
 
-api_key = open(os.path.join(BASE_DIR, 'football', 'api_key'), 'r').read()
+#api_key = open(os.path.join(BASE_DIR, 'football', 'api_key'), 'r').read()
+api_key = '7bd28a575c15404ba1e0fd9ebccfaa5d'
 
 def all_match_updates():
     # Getting matches info:- All recent and upcoming matches details
