@@ -3,14 +3,39 @@ sys.path.append(os.path.split(os.path.abspath(__file__))[0])
 os.environ["DJANGO_SETTINGS_MODULE"] = "MakeABet.settings"
 django.setup()
 
-
-from football.football_data import all_match_updates
+import requests
+import pickle
 from football.models import Bets, Match
 import time
+from MakeABet.settings import BASE_DIR
+
+api_key = open(os.path.join(BASE_DIR, 'football', 'api_key'), 'r').read()
+#api_key = '7bd28a575c15404ba1e0fd9ebccfaa5d'
+
+
+def football_matches():
+    """ Get all the for recent matches (upto 24 hours before present time) and upcoming matches(upto 7 days from present time) """
+
+    league_file = open(os.path.join(BASE_DIR, 'football', 'all_leagues'), 'rb')
+    all_leagues = pickle.load(league_file)
+
+    all_matches = requests.get("https://api.crowdscores.com/api/v1/matches?api_key="+api_key).json()
+    leag_wise_match = {}
+    for league in all_leagues:
+        leag_wise_match[league['dbid']] = []
+
+    for match in all_matches:
+        try:
+            leag_wise_match[match['competition']['dbid']].append({'dbid':match['dbid'], 'homeTeam':match['homeTeam']['name'], 'awayTeam':match['awayTeam']['name'], 'matchTime':match['start'], 'outcome':match['outcome'], 'homeGoals':match['homeGoals'], 'awayGoals':match['awayGoals'], 'league': match['competition']['name'] })
+        except:
+            pass
+
+    return leag_wise_match
 
 def update_match():
-    all_matches = all_match_updates()
+    """ Update match data in the database """
 
+    all_matches = football_matches()
     league_ids = [ 2, 46, 47, 49, 36, 48, ]
 
     for league_id in league_ids:
@@ -85,6 +110,7 @@ def update_match():
                 new_match.save()
 
 def start_up():
+    """ Update match data every 5 minutes to database """
     while(True):
         try:
             update_match()

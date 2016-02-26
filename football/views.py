@@ -10,7 +10,6 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from football.forms import UserForm, BettingForm
 from football.models import UserProfile, Match, Bets
 from rest_framework.authtoken.models import Token
-from football.football_data import league_matches_list, all_match_updates
 import simplejson
 import datetime
 
@@ -83,14 +82,18 @@ def api_registration(request):
 
 def league(request, league_name):
     league_name = league_name.replace("-"," ").title()
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2 }
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'Premier League': 2 }
     if league_name in league_dict:
         league_url = "-".join(league_name.lower().split())
-        league_wise_match = all_match_updates()
-        league_matches = league_matches_list(league_wise_match,league_dict[league_name])
-        upcoming_matches = league_matches['upcomingMatches']
-        print(league_matches)
-        context = { 'league_name': league_name, 'upcoming_matches': upcoming_matches, 'league_url': league_url, }
+        league_matches = Match.objects.filter(league=league_name)
+        upcoming_matches = []
+
+        for league_match in league_matches:
+            match_time = datetime.datetime.fromtimestamp(league_match.time/1000)
+            if match_time > datetime.datetime.now():
+                upcoming_matches.append(league_match)
+
+        context = { 'league_name': league_name, 'upcoming_matches': upcoming_matches, 'league_url': league_url, 'match_time': match_time }
         return render(request, 'league.html', context)
     else:
         return HttpResponseRedirect('/')
@@ -99,7 +102,7 @@ def league(request, league_name):
 def match(request, league_name, match_id):
 
     match_data = Match.objects.get(match_id=match_id)
-    match_time = datetime.datetime.fromtimestamp(int(match_data.time)/1000)
+    match_time = datetime.datetime.fromtimestamp(match_data.time/1000)
 
     if request.method == 'POST':
         print("post request received")
