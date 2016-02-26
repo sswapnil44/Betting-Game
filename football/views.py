@@ -10,8 +10,9 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from football.forms import UserForm, BettingForm
 from football.models import UserProfile, Match, Bets
 from rest_framework.authtoken.models import Token
-from football.football_data import matchSelection, league_matches_list, all_match_updates
+from football.football_data import league_matches_list, all_match_updates
 import simplejson
+import datetime
 
 def home(request):
     context_dict = dict()
@@ -96,9 +97,9 @@ def league(request, league_name):
 
 @login_required()
 def match(request, league_name, match_id):
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'English Premier League': 2, }
-    league_name = league_name.replace("-"," ").title()
-    match_data = matchSelection(match_id)
+
+    match_data = Match.objects.get(match_id=match_id)
+    match_time = datetime.datetime.fromtimestamp(int(match_data.time)/1000)
 
     if request.method == 'POST':
         print("post request received")
@@ -121,7 +122,7 @@ def match(request, league_name, match_id):
         betting_form = BettingForm()
 
 
-    context = {'match_data': match_data, 'betting_form': betting_form }
+    context = {'match_data': match_data, 'match_time': match_time, 'betting_form': betting_form }
 
     return render(request, 'bet_page.html', context)
 

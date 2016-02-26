@@ -67,23 +67,6 @@ def league_matches_list(leag_wise_match, input_league_id):
     return league_matches
 
 
-def matchSelection(match_id):
-    chosen_match = requests.get("https://api.crowdscores.com/api/v1/matches/"+str(match_id)+"?api_key="+api_key).json()
-    match_dict = {}
-    match_dict['matchTime'] = datetime.datetime.fromtimestamp(int(chosen_match['start'])/1000)
-    match_dict['homeTeam'] = chosen_match['homeTeam']['name']
-    match_dict['awayTeam'] = chosen_match['awayTeam']['name']
-
-    if(match_dict['matchTime']>datetime.datetime.now()):
-        pass
-    else:
-        match_dict['winner'] = chosen_match['outcome']['winner']
-        match_dict['homeGoals'] = chosen_match['homeGoals']
-        match_dict['awayGoals'] = chosen_match['awayGoals']
-
-    return match_dict
-
-
 if __name__ == "__main__":
     # Getting leagues info:- All leagues and competitions detail
     league_file = open('all_leagues', 'rb')
