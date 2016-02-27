@@ -10,26 +10,29 @@ from football.forms import BettingForm
 from football.models import UserProfile, Match
 import datetime
 
+
 def index(request):
     return render(request, 'football/index.html')
 
+
 def league(request, league_name):
     league_name = league_name.replace("-"," ").title()
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'Premier League': 2 }
+    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'Premier League': 2,}
     if league_name in league_dict:
         league_url = "-".join(league_name.lower().split())
         league_matches = Match.objects.filter(league=league_name)
         upcoming_matches = []
 
         for league_match in league_matches:
-            match_time = datetime.datetime.fromtimestamp(league_match.time/1000)
+            match_time = datetime.datetime.fromtimestamp((league_match.time)/1000)
             if match_time > datetime.datetime.now():
-                upcoming_matches.append(league_match)
+                upcoming_matches.append([league_match, match_time])
 
-        context = { 'league_name': league_name, 'upcoming_matches': upcoming_matches, 'league_url': league_url, 'match_time': match_time }
+        context = { 'league_name': league_name, 'upcoming_matches': upcoming_matches, 'league_url': league_url,}
         return render(request, 'football/league.html', context)
     else:
         return HttpResponseRedirect('/')
+
 
 @login_required()
 def match(request, league_name, match_id):
@@ -56,7 +59,6 @@ def match(request, league_name, match_id):
             print(betting_form.errors)
     else:
         betting_form = BettingForm()
-
 
     context = {'match_data': match_data, 'match_time': match_time, 'betting_form': betting_form }
 

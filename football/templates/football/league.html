@@ -8,7 +8,7 @@
     <h1>{{ league_name }}</h1>
     <h3>Select a match to bet</h3>
     {% for upcoming_match in upcoming_matches %}
-        <a href="{% url 'match' league_url upcoming_match.match_id %}">{{ upcoming_match.home_team }} Vs {{ upcoming_match.away_team }}   -  {{ match_time }}</a><br><br>
+        <a href="{% url 'match' league_url upcoming_match.0.match_id %}">{{ upcoming_match.0.home_team }} Vs {{ upcoming_match.0.away_team }}   -  {{ upcoming_match.1 }}</a><br><br>
     {% endfor %}
 
 

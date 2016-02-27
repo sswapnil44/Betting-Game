@@ -6,7 +6,6 @@ from football.forms import UserForm, BettingForm
 from football.models import UserProfile, Match, Bets
 from rest_framework.authtoken.models import Token
 import simplejson
-import datetime
 
 def home(request):
     context_dict = dict()
