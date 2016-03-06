@@ -1,15 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils.encoding import smart_text
+from MakeABet.models import UserProfile
 
-class UserProfile(models.Model):
-    #Links UserProfile to User model
-    user = models.OneToOneField(User)
-
-    points = models.IntegerField(default=0)
-
-    def __str__(self):
-        return smart_text(self.user.username)
 
 class Match(models.Model):
     match_id = models.IntegerField(primary_key=True)
@@ -38,4 +29,3 @@ class Bets(models.Model):
 
     def __str__(self):
         a = "For match " + str(self.match_id.match_id) + " by " + str(self.username.user.username)
-        return a
