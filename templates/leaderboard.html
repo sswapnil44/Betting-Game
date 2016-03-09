@@ -1,15 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Leaderboard</title>
-</head>
-<body>
-    <h1>Leaderboard</h1>
-    <ol>
-        {% for user_profile in user_profiles %}
-        <li>{{ user_profile.user.username }} : {{ user_profile.points }}</li>
-        {% endfor %}
-    </ol>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+    <div class="col-xs-12 col-sm-9">
+        <h1>Leaderboard</h1>
+        <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Points</th>
+            </thead>
+            <tbody>
+                {% for user_profile in user_profiles %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ user_profile.user.username }}</td>
+                        <td>{{ user_profile.points }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}

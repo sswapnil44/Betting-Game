@@ -1,22 +1,37 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Login</title>
-    </head>
-    <body>
-        {% if not user.is_authenticated %}
-            <h1>Login</h1>
-            <form id="login_form" method="post">
-            {% csrf_token %}
-            Username: <input type="text" name="username" value="" size="50" />
-            <br />
-            Password: <input type="password" name="password" value="" size="50" />
-            <br />
-            <input type="submit" value="submit" />
-            </form>
-        {% else %}
-            <p>You are already registered.</p>
-            <!--<a href="/">Back to homepage</a>-->
-        {% endif %}
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign In
+{% endblock %}
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div class="row row-content">
+            <div class="col-xs-12 col-sm-12 col-sm-push-5">
+                <h1>Sign In</h1>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-sm-push-4">
+                <form class="form-horizontal" role="form" id="login_form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class=" col-sm-offset-4 col-sm-4">
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <h2>You are already registered.</h2>
+    {% endif %}
+{% endblock %}

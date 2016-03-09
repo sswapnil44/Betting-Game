@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ profile.user.firstname }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ profile.user.first_name }} {{ profile.user.last_name }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Winner</th>
+                <th>Goal Difference</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bet in bets %}
+            <tr>
+                <td>{{ bet.winner_prediction }}</td>
+                <td>{{ bet.goal_difference }}</td>
+                <td>{{ bet.home_goals_prediction }} - {{ bet.away_goals_prediction }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

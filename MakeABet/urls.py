@@ -29,9 +29,10 @@ urlpatterns = [
     url(r'^football/', include('football.urls')),
     url(r'^auth_key/$', api_registration, name='registerapi'),
     url(r'^api/bets/$', allBets, name='bets_info'),
-    url(r'^api/matches/$', allMatches, name='matches_info'),
+    url(r'^api/matches/$', allMatches, name='match_list'),
     url(r'^leaderboard/$', leaderboard, name='leaderboard'),
     url(r'^register/$', register, name='register'),
-    url(r'^login/$', user_login, name='user_login'),
-    url(r'^logout/$', user_logout, name='user_logout'),
+    url(r'^login/$', user_login, name='login'),
+    url(r'^logout/$', user_logout, name='logout'),
+    url(r'^profile/(?P<username>[\w\d\-]+)$', user_profile, name='user_profile'),
 ]

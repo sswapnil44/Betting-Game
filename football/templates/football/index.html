@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Football</title>
-</head>
-<body>
-            <p>Select a league to bet</p>
-            <a href="{% url 'league' 'premier-league' %}">English Premier League</a><br>
-            <a href="{% url 'league' 'la-liga' %}">La Liga</a><br>
-            <a href="{% url 'league' 'serie-a' %}">Serie A</a><br>
-            <a href="{% url 'league' 'champions-league' %}">Champions League</a><br>
-            <a href="{% url 'league' 'bundesliga' %}">Bundesliga</a><br>
-            <a href="{% url 'league' 'ligue-1' %}">Ligue 1</a><br>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+    Football
+{% endblock %}
+
+{% block content %}
+    <h3>Select a league to bet</h3><br>
+    <ul class="list-unstyled list-group">
+        <li><a href="{% url 'league' 'premier-league' %}">English Premier League</a></li>
+        <li><a href="{% url 'league' 'la-liga' %}">La Liga</a></li>
+        <li><a href="{% url 'league' 'serie-a' %}">Serie A</a></li>
+        <li><a href="{% url 'league' 'champions-league' %}">Champions League</a></li>
+        <li><a href="{% url 'league' 'bundesliga' %}">Bundesliga</a></li>
+        <li><a href="{% url 'league' 'ligue-1' %}">Ligue 1</a></li>
+    </ul>
+{% endblock %}

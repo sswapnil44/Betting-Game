@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Leagues</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
     <h1>{{ league_name }}</h1>
     <h3>Select a match to bet</h3>
     {% for upcoming_match in upcoming_matches %}
         <a href="{% url 'match' league_url upcoming_match.0.match_id %}">{{ upcoming_match.0.home_team }} Vs {{ upcoming_match.0.away_team }}   -  {{ upcoming_match.1 }}</a><br><br>
     {% endfor %}
 
-
-</body>
-</html>
+{% endblock %}

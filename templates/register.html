@@ -1,28 +1,52 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Register</title>
-    </head>
-    <body>
-        <h1>Register</h1>
-        {% if user.is_authenticated %}
-            <h3>You are already registered</h3>
-            <a href="/">Back to homepage</a>
-        {% else %}
-            {% if registered %}
-            <strong>thank you for registering!</strong>
-            <a href="/">Return to the homepage.</a><br />
-            {% else %}
-            <form id="user_form" method="post" action="/register" enctype="multipart/form-data">
-                {% csrf_token %}
-                <!-- Display each form. The as_p method wraps each element in a paragraph
-                (<p>) element. This ensures each element appears on a new line,
-                making everything look neater. -->
-                {{ user_form.as_p }}
-                <!-- Provide a button to click to submit the form. -->
-                <input type="submit" name="submit" value="Register" />
-            </form>
-            {% endif %}
-        {% endif %}
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div class="row row-content">
+            <div class="col-xs-12 col-sm-12 col-sm-push-5">
+                <h1>Sign Up</h1>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-sm-push-4">
+                {{ form.non_field_errors }}
+                <form class="form-horizontal" role="form" id="register_form" method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" pattern=".{8,}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                        <input type="text" class="form-control" name="first_name" id="firstname" placeholder="First Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                        <input type="text" class="form-control" name="last_name" id="lastname" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class=" col-sm-offset-4 col-sm-4">
+                            <button type="submit" class="btn btn-primary" form="register_form" value="Submit">Sign Up</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <h2>You are already registered.</h2>
+    {% endif %}
+{% endblock %}
