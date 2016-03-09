@@ -5,5 +5,4 @@ from football.models import *
 
 admin.site.register(Match)
 admin.site.register(Bets)
-admin.site.register(UserProfile)
 #admin.14

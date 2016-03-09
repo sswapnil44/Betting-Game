@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from football.forms import UserForm
-from football.models import UserProfile, Match, Bets
+from MakeABet.forms import UserForm
+from MakeABet.models import UserProfile
+from football.models import Match, Bets
 from rest_framework.authtoken.models import Token
 import simplejson
-
 
 def home(request):
     context_dict = dict()

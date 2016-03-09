@@ -7,7 +7,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from football.forms import BettingForm
-from football.models import UserProfile, Match
+from MakeABet.models import UserProfile
+from football.models import Match
 import datetime
 
 
