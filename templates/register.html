@@ -25,6 +25,11 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12">
+                            <input type="password" class="form-control" name="password" id="confirm_password" placeholder="Confirm Password" pattern=".{8,}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
                         <input type="text" class="form-control" name="first_name" id="firstname" placeholder="First Name" required>
                         </div>
                     </div>
@@ -44,4 +49,20 @@
     {% else %}
         <h2>You are already registered.</h2>
     {% endif %}
+{% endblock %}
+{% block script %}
+    <script>
+        var password = document.getElementById("password"), confirm_password = document.getElementById("confirm_password");
+
+        function validatePassword(){
+          if(password.value != confirm_password.value) {
+            confirm_password.setCustomValidity("Passwords Don't Match");
+          } else {
+            confirm_password.setCustomValidity('');
+          }
+        }
+
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
 {% endblock %}
