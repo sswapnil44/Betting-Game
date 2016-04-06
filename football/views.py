@@ -17,8 +17,8 @@ def index(request):
 
 
 def league(request, league_name):
-    league_name = league_name.replace("-"," ").title()
-    league_dict = {'La Liga': 46,'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'Premier League': 2,}
+    league_name = league_name.replace("-", " ").title()
+    league_dict = {'La Liga': 46, 'Ligue 1': 47, 'Serie A': 49, 'Champions League': 36, 'Bundesliga': 48, 'Premier League': 2}
     if league_name in league_dict:
         league_url = "-".join(league_name.lower().split())
         league_matches = Match.objects.filter(league=league_name)
@@ -46,9 +46,9 @@ def match(request, league_name, match_id):
         betting_form = BettingForm(data=request.POST)
         if betting_form.is_valid():
             bet = betting_form.save(commit=False)
-            bet.username = UserProfile.objects.get(user=request.user)
+            bet.user_profile = UserProfile.objects.get(user=request.user)
             try:
-                bet.match_id = Match.objects.get(match_id=match_id)
+                bet.match = Match.objects.get(match_id=match_id)
             except:
                 return HttpResponse('MatchID not found')
             try:

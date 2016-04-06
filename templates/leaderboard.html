@@ -9,14 +9,14 @@
         <table class="table table-striped">
             <thead>
                 <th>Rank</th>
-                <th>Username</th>
+                <th>Email</th>
                 <th>Points</th>
             </thead>
             <tbody>
                 {% for user_profile in user_profiles %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ user_profile.user.username }}</td>
+                        <td>{{ user_profile.user.email }}</td>
                         <td>{{ user_profile.points }}</td>
                     </tr>
                 {% endfor %}

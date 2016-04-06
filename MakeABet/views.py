@@ -20,14 +20,12 @@ def home(request):
 @login_required()
 def user_profile(request, username):
     profile = UserProfile.objects.get(user=request.user)
-    if username == profile.user.username:
-        bets = Bets.objects.filter(username=profile)
+    if int(username) == profile.user.id:
+        bets = Bets.objects.filter(user_profile=profile)
         context_dict = {'profile': profile, 'bets': bets}
-        print("afsgfsgasfgafsafg")
         return render(request, 'profile.html', context_dict)
     else:
         return HttpResponse("Access Denied")
-
 
 
 @login_required()
@@ -140,10 +138,10 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=email, password=password)
 
         if user is not None:
             if user.is_active:

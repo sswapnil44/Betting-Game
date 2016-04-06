@@ -9,7 +9,7 @@ from football.models import Bets, Match
 import time
 from MakeABet.settings import BASE_DIR
 
-api_key = open(os.path.join(BASE_DIR, 'football', 'api_key'), 'r').read()
+api_key = open(os.path.join(BASE_DIR, 'football', 'api_key2'), 'r').read()
 #api_key = '7bd28a575c15404ba1e0fd9ebccfaa5d'
 
 
